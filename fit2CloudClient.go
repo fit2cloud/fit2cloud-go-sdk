@@ -438,3 +438,36 @@ func (client *Fit2CloudClient) GetServers(clusterId int64, clusterRole int64, so
 		return nil, errors.New(resp.Status)
 	}
 }
+/**
+ * 获取指定虚机信息
+ *
+ * @param serverId	虚机ID
+ * @return
+ * @throws Fit2CloudException
+ */
+func (client *Fit2CloudClient) GetServer(serverId int64) (Server, error) {
+	geturl := client.RootApiUrl + "/server/"+strconv.FormatInt(serverId,10)
+
+	resp, err := client.c.Get(geturl, nil, &oauth.AccessToken{})
+	if err != nil {
+		return Server{}, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode == 200 {
+		var server Server
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			//panic(err.Error())
+			return Server{}, err
+		}
+		err = json.Unmarshal(body, &server)
+		if err != nil {
+			//panic(err.Error())
+			return Server{}, err
+		}
+		return server, nil
+
+	} else {
+		return Server{}, errors.New(resp.Status)
+	}
+}

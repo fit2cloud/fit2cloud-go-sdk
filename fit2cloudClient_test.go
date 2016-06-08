@@ -82,3 +82,10 @@ func TestGetServers(t *testing.T) {
 	t.Logf("%v\n", servers)
 	assert.Nil(t, err)
 }
+
+func TestGetServer(t *testing.T){
+	client := NewClient(defaultkey, defaultSecret, defaultEndpoint)
+	servers, err := client.GetServer(22)
+	t.Logf("%v\n", servers)
+	assert.Nil(t, err)
+}
